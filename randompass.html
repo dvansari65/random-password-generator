@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #c1e1ff, #c3f7e8, #ffefd5, #f9c4c4);
+            background-size: 400% 400%;
+            animation: softBackground 12s ease infinite;
+        }
+
+        @keyframes softBackground {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            width: 350px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            color: #333;
+        }
+
+        .inputbox {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 2px solid #bbb;
+            border-radius: 25px;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            outline: none;
+        }
+
+        .inputbox::placeholder {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        #inputslider {
+            width: 100%;
+            margin-top: 15px;
+            appearance: none;
+            height: 10px;
+            background: linear-gradient(90deg, #74b9ff, #55efc4);
+            border-radius: 10px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        #inputslider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #0984e3;
+            cursor: pointer;
+            border: 2px solid #fff;
+        }
+
+        .row {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+        }
+
+        #passlength {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 10px 0;
+        }
+
+        label {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        input[type="checkbox"] {
+            transform: scale(1.3);
+            accent-color: #74b9ff;
+            margin-right: 10px;
+            border-radius: 50%;
+            background-color: #e0f7fa;
+            box-shadow: 0 3px 5px rgba(100, 100, 255, 0.2);
+        }
+
+        input[type="checkbox"]:checked {
+            accent-color: #55efc4;
+        }
+
+        .generatepass {
+            background-color: #74b9ff;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            margin-top: 20px;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .generatepass:hover {
+            background-color: #55efc4;
+            transform: scale(1.05);
+        }
+
+        .container:hover {
+            box-shadow: 0 10px 25px rgba(100, 100, 255, 0.3);
+            transform: scale(1.01);
+            transition: 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>PASSWORD GENERATOR</h2>
+        <input type="text" class="inputbox" placeholder="Generated Password" required>
+        <br>
+        <input id="inputslider" type="range" min="1" max="30" value="8">
+        <div class="row">
+            <p id="passlength">Password length:</p>
+            <span id="slidervalue"></span>
+        </div>
+
+        <div class="checkbox-group">
+            <label for="lowercase">
+                <input type="checkbox" id="lowercase"> Include lowercase letters (a-z)
+            </label>
+            <label for="uppercase">
+                <input type="checkbox" id="uppercase"> Include uppercase letters (A-Z)
+            </label>
+            <label for="numbers">
+                <input type="checkbox" id="numbers"> Include numbers (0-9)
+            </label>
+            <label for="symbols">
+                <input type="checkbox" id="symbols"> Include symbols (!@#$%^&)
+            </label>
+        </div>
+
+        <button id="generator" class="generatepass">GENERATE PASSWORD</button>
+    </div>
+</body>
+
+<script>
+    // Your existing JavaScript code
+    const inputbox = document.querySelector(".inputbox");
+    const button = document.querySelector(".generatepass");
+    const inputslider = document.querySelector("#inputslider");
+    const slidervalue = document.querySelector("#slidervalue");
+    const lowercase = document.querySelector("#lowercase");
+    const uppercase = document.querySelector("#uppercase");
+    const number = document.querySelector("#numbers");
+    const symbols = document.querySelector("#symbols");
+    let passlength = document.querySelector("#passlength");
+    
+    slidervalue.innerHTML = inputslider.value;
+    inputslider.addEventListener("input", function (e) {
+        slidervalue.innerHTML = inputslider.value;
+    });
+    
+    button.addEventListener("click", function (e) {
+        inputbox.value = generatepassword();
+    });
+    
+    let lowerchars = "abcdefghijklmnopqrstuvwxyz";
+    let upperchars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let allnumbers = "1234567890";
+    let allsymbols = "!@#$%^&";
+    
+    function generatepassword() {
+        let generatepass = "";
+        let allchar = "";
+        allchar += lowercase.checked ? lowerchars : "";
+        allchar += uppercase.checked ? upperchars : "";
+        allchar += number.checked ? allnumbers : "";
+        allchar += symbols.checked ? allsymbols : "";
+    
+        generatepass = allchar.charAt(Math.floor(Math.random() * allchar.length));
+        if (allchar.length === 0) {
+            return "Select at least one option!";
+        }
+        for (let i = 0; i < inputslider.value; i++) {
+            generatepass += allchar.charAt(Math.floor(Math.random() * allchar.length));
+        }
+        return generatepass;
+    }
+</script>
+</html>
